@@ -17,14 +17,19 @@ export function asJson(body, statusCode = 200) {
     };
 }
 
+const logDefault = (data) => {
+    console.log(data);
+    return true;
+}
+
 export default abstract class Command {
 
     public abstract process(input): Promise<any>;
 
     public static run(
         inputArgs: string[],
-        log?: (text, position) => boolean,
-        error?: (text, position) => boolean) {
+        log: (text, position) => boolean = logDefault,
+        error: (text, position) => boolean = logDefault) {
         const child = spawn(ffmpegPath, inputArgs);
         return new Promise<string>((resolve, reject) => {
             const errors = [];
