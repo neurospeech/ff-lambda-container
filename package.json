@@ -11,6 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^18.11.18",
-    "tmp-promise": "^3.0.3"
+    "tmp-promise": "^3.0.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "node-fetch": "^2.6.7",
+    "mime-types": "^2.1.35"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20"
   }
 }

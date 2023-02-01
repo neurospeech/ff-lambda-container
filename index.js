@@ -1,3 +1,3 @@
-const SaveUrl = require("./dist/SaveUrl").default;
+const SaveUrl = require("./dist/App").default;
 
-exports.handler = (event, context) => SaveUrl.save(event);
+exports.handler = (event, context) => Commands.process(event);
