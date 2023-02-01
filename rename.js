@@ -1,7 +1,19 @@
 const fs = require("fs");
 const path = require("path");
 
-const ffmpeg = path.join(__dirname, "ffmpeg");
+const getFFPath = () => {
+    for (const iterator of fs.readdirSync(__dirname, {
+        withFileTypes: true
+    })) {
+        if(iterator.isDirectory()) {
+            if(path.basename(iterator.name).startsWith("ffmpeg")) {
+                return iterator.name;
+            }
+        }
+    }
+    throw new Error("no ffmpeg file found");
+};
 
-const first = fs.readdirSync(ffmpeg);
-fs.renameSync(first[0], path.join(ffmpeg, "static"));
+const ffmpeg = getFFPath();
+
+fs.renameSync(ffmpeg, path.join(__dirname, "ffmpeg"));
