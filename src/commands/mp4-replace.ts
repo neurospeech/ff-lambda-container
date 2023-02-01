@@ -13,7 +13,7 @@ export default class Mp4Replace extends Command {
         const video = await TempFileService.downloadTo(input.url);
         const audio = await TempFileService.downloadTo(input.audioUrl);
 
-        const rs = await Command.run(`-i ${video} -i ${audio} ${slow} -map 0:v:0 -map 1:a:0 ${output.path}`.split(" "));
+        const rs = await Command.run(`-i ${video} -i ${audio} ${slow} -map 0:v:0 -map 1:a:0 -y ${output.path}`.split(" "));
         console.log(rs);
         return asJson(rs);
     }
