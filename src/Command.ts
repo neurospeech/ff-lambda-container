@@ -17,8 +17,8 @@ export function asJson(body, statusCode = 200) {
     };
 }
 
-const logDefault = (data) => {
-    console.log(data);
+const logDefault = (data: Buffer) => {
+    console.log(data.toString("utf8"));
     return true;
 }
 
