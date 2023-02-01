@@ -19,7 +19,7 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
-    - run: npm install
+    - run: npm ci
     - run: npm install -g typescript
     - run: tsc
     
