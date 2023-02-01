@@ -1,0 +1,17 @@
+{
+  "name": "puppeteer-lambda-layer",
+  "version": "1.0.74",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postversion": "git push --follow-tags"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.11.18",
+    "puppeteer-core": "^19.5.2",
+    "tmp-promise": "^3.0.3"
+  }
+}
