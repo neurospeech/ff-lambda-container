@@ -1,7 +1,10 @@
+import { spawn } from "child_process";
 import * as ffmpeg from "fluent-ffmpeg";
 import path from "path";
 
-ffmpeg.setFfmpegPath(path.join(__dirname, "..", "ffmpeg", "ffmpeg"));
+const ffmpegPath = path.join(__dirname, "..", "ffmpeg", "ffmpeg");
+
+ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(path.join(__dirname, "..", "ffmpeg", "ffprobe"));
 
 export function asJson(body, statusCode = 200) {
@@ -17,5 +20,53 @@ export function asJson(body, statusCode = 200) {
 export default abstract class Command {
 
     public abstract process(input): Promise<any>;
+
+    public static run(
+        inputArgs: string[],
+        log?: (text, position) => boolean,
+        error?: (text, position) => boolean) {
+        const child = spawn(ffmpegPath, inputArgs);
+        return new Promise<string>((resolve, reject) => {
+            const errors = [];
+            const lines = [];
+            let logPosition = 0;
+            let errorPosition = 0;
+            let killed = false;
+            child.stderr.on("data", (e) => {
+                errors.push(e);
+                const ep = errorPosition;
+                errorPosition += e.length;
+                if (!error) {
+                    return;
+                }
+                if (error(e, ep)) {
+                    return;
+                }
+                killed = true;
+                child.kill();
+            });
+            child.stdout.on("data", (data) => {
+                lines.push(data);
+                const lp = logPosition;
+                logPosition += data.length;
+                if (!log) {
+                    return;
+                }
+                if (log(data, lp)) {
+                    return;
+                }
+                killed = true;
+                child.kill();
+            });
+            child.on("error", (er) => {
+                if (!killed) {
+                    reject(er);
+                }
+            });
+            child.on("close", () => {
+                resolve(`${lines.join("\n")}\n${errors.join("\n")}`);
+            });
+        });
+    }
 
 }
