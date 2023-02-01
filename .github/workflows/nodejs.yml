@@ -20,10 +20,11 @@ jobs:
         node-version: 18.x
         cache: 'npm'
     - run: npm install
-    - run: npm install puppeteer
-    - run: chmod -R +x node_modules/puppeteer-chromium
     - run: npm install -g typescript
     - run: tsc
+    
+    - run: wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+    - run: tar xvf ./ffmpeg-release-amd64-static.tar.xz --directory ./ffmpeg
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
