@@ -39,8 +39,8 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: puppeteer-lambda
-        IMAGE_TAG: puppeteer_lambda
+        ECR_REPOSITORY: ff-lambda
+        IMAGE_TAG: ff_lambda
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG    
