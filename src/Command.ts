@@ -1,8 +1,8 @@
 import * as ffmpeg from "fluent-ffmpeg";
 import path from "path";
 
-ffmpeg.setFfmpegPath(path.join(__dirname, "..", "ffmpeg"));
-ffmpeg.setFfprobePath(path.join(__dirname, "..", "ffmpeg"));
+ffmpeg.setFfmpegPath(path.join(__dirname, "..", "ffmpeg", "ffmpeg"));
+ffmpeg.setFfprobePath(path.join(__dirname, "..", "ffmpeg", "ffprobe"));
 
 export function asJson(body, statusCode = 200) {
     return {
