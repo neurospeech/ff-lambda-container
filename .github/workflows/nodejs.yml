@@ -24,8 +24,7 @@ jobs:
     - run: tsc
     
     - run: wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
-    - run: mkdir ./ffmpeg
-    - run: tar xvf ./ffmpeg-release-amd64-static.tar.xz --directory ./ffmpeg
+    - run: tar xvf ./ffmpeg-release-amd64-static.tar.xz
     - run: node ./rename.js
     - run: ls ./ffmpeg
 
