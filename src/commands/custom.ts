@@ -1,3 +1,4 @@
+import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import Command, { asJson } from "../Command";
 import TempFileService from "../TempFileService";
@@ -18,20 +19,29 @@ export default class Custom extends Command {
 
         const inputs: ICommandInput[] = [];
 
-        const outputs: ICommandInput[] = [];
+        let output: ICommandInput;
+
+        const thumbnails: ICommandInput[] = [];
 
         let command = input.command as string;
 
         for (const key in input) {
             if (Object.prototype.hasOwnProperty.call(input, key)) {
                 const element = input[key];
+                if (key.startsWith("thumb")) {
+                    thumbnails.push({
+                        name: key,
+                        url: element
+                    });
+                    continue;
+                }
                 const filePath = (await TempFileService.getTempFile(path.extname(key))).path;
                 if(key.startsWith("output")) {
-                    outputs.push({
+                    output = {
                         name: key,
                         url: element,
                         filePath
-                    })
+                    };
                     command = command.replace(key, filePath);
                     continue;
                 }
@@ -52,11 +62,77 @@ export default class Custom extends Command {
         // we will upload all back to output urls...
         const rs = await Command.run(command.split(" "));
 
+        const tasks = [this.upload(output)];
+
+        if (thumbnails.length) {
+            await this.thumbnails(output.filePath, thumbnails, tasks);
+        }
+
         // upload all outputs...
-        await Promise.all(outputs.map((x) => this.upload(x)))
+        await Promise.all(tasks);
 
         console.log(rs);
         return asJson(rs);
+    }
+
+    async thumbnails(input: string, times: ICommandInput[], tasks: Promise<void>[]) {
+
+        const start = Date.now();
+
+        console.log("Starting thumbnails");
+
+        const folder = path.dirname(input);
+        const fileNames = await new Promise<string[]>((resolve, reject) => {
+            let files;
+            ffmpeg(input, { timeout: 60 })
+                .on("filenames", (names: string[]) => {
+                    files = names;
+                })
+                .on("end", () => {
+                    resolve(files);
+                })
+                .on("error", (error) => {
+                    console.error(error);
+                    reject(error);
+                })
+                .screenshots({
+                    folder,
+                    timestamps: times.map((x) => {
+                        if (!x.url) {
+                            throw new Error("Url must be specified for timed thumbnail")
+                        }
+                        return typeof x.name === "number" ? x.name : parseFloat(x.name);
+                    }),
+                    filename: start + "%000i.jpg"
+                });
+        });
+
+
+        let lastFile: string;
+
+        fileNames.forEach((x, i) => {
+            const t = times[i];
+            if (!t) {
+                return;
+            }
+            let filePath = folder + "/" + x;
+
+            // this will ensure that 1.jpg will exist if 0.jpg exists...
+            if(!existsSync(filePath) && i === 1) {
+                filePath = lastFile;
+            }
+
+            lastFile = filePath;
+
+            tasks.push(this.upload({
+                name: t.name,
+                url: t.url,
+            filePath }));
+        });
+
+
+        return times;
+
     }
     
     async upload(x: ICommandInput) {
