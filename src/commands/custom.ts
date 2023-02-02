@@ -2,7 +2,9 @@ import path from "path";
 import Command, { asJson } from "../Command";
 import TempFileService from "../TempFileService";
 import fetch from "node-fetch";
-import { readFileSync } from "fs";
+import * as mime from "mime-types";
+import { existsSync, readFileSync, promises } from "fs";
+import { BlockBlobClient } from "@azure/storage-blob";
 
 interface ICommandInput {
     name: string;
@@ -61,23 +63,33 @@ export default class Custom extends Command {
         if (!x.url) {
             return;
         }
+        if (!existsSync(x.filePath)) {
+            return;
+        }
         if (x.url.includes(".blob.core.widows.net")) {
             // use put...
             return this.uploadAzure(x);
         }
     }
 
-    async uploadAzure(x: ICommandInput) {
-        const rs = await fetch(x.url, {
-            method: "PUT",
-            headers: {
-                "x-ms-blob-type": "BlockBlob"
-            },
-            body: readFileSync(x.filePath)
+    async uploadAzure({url, filePath}: ICommandInput) {
+        console.log(`Uploading ${url}`);
+
+        const blobContentType = mime.lookup(filePath);
+
+        var b = new BlockBlobClient(url);
+        await b.uploadFile(filePath, {
+            blobHTTPHeaders: {
+                blobContentType,
+                blobCacheControl: "public, max-age=3240000"
+            }
         });
-        if (rs.status !== 201) {
-            throw new Error(await rs.text());
+        try {
+            await promises.unlink(filePath);
+        } catch {
+            // do nothing...
         }
+
     }
 
 }
