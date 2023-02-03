@@ -32,12 +32,7 @@ RUN ls ${FUNCTION_DIR}
 
 ENV HOME="/tmp"
 
-COPY dist ${FUNCTION_DIR}/dist
-COPY package.json ${FUNCTION_DIR}
-COPY src ${FUNCTION_DIR}/src
-COPY ffmpeg ${FUNCTION_DIR}/ffmpeg
-COPY index.js ${FUNCTION_DIR}
-COPY node_modules ${FUNCTION_DIR}/node_modules
+COPY dist package.json src ffmpeg index.js node_modules ${FUNCTION_DIR}
 
 WORKDIR ${FUNCTION_DIR}
 
