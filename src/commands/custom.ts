@@ -144,7 +144,7 @@ export default class Custom extends Command {
             console.log(`Cannot upload ${x.filePath} as upload url is empty.`);
             return;
         }
-        if (x.url.includes(".blob.core.widows.net")) {
+        if (x.url.includes(".blob.core.windows.net")) {
             // use put...
             return this.uploadAzure(x);
         }
