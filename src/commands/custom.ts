@@ -136,16 +136,19 @@ export default class Custom extends Command {
     }
     
     async upload(x: ICommandInput) {
-        if (!x.url) {
+        if (!existsSync(x.filePath)) {
+            console.log(`File ${x.filePath} does not exist.`);
             return;
         }
-        if (!existsSync(x.filePath)) {
+        if (!x.url) {
+            console.log(`Cannot upload ${x.filePath} as upload url is empty.`);
             return;
         }
         if (x.url.includes(".blob.core.widows.net")) {
             // use put...
             return this.uploadAzure(x);
         }
+        console.log(`File ${x.url} not supported for upload.`);
     }
 
     async uploadAzure({url, filePath}: ICommandInput) {
