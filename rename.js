@@ -7,7 +7,7 @@ const getFFPath = () => {
     })) {
         if(iterator.isDirectory()) {
             if(path.basename(iterator.name).startsWith("ffmpeg")) {
-                return iterator.name;
+                return path.join(__dirname ,iterator.name);
             }
         }
     }
@@ -15,5 +15,6 @@ const getFFPath = () => {
 };
 
 const ffmpeg = getFFPath();
-
-fs.renameSync(ffmpeg, path.join(__dirname, "ffmpeg"));
+const dest = path.join(__dirname, "ffmpeg");
+fs.renameSync(ffmpeg, dest);
+console.log(`${ffmpeg} renamed to ${dest}`)
