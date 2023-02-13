@@ -29,8 +29,8 @@ RUN npm ci && \
     npm install aws-lambda-ric && \
     npm install -g typescript
 
-COPY entrypoint.sh ${FUNCTION_DIR}
-RUN chmod +x ${FUNCTION_DIR}/entrypoint.sh
+# COPY entrypoint.sh ${FUNCTION_DIR}
+# RUN chmod +x ${FUNCTION_DIR}/entrypoint.sh
 COPY src ${FUNCTION_DIR}/src
 COPY index.js ${FUNCTION_DIR}
 COPY rename.js ${FUNCTION_DIR}
@@ -41,11 +41,6 @@ RUN tsc
 
 # Build Stage 2: Copy Build Stage 1 files in to Stage 2. Install chromium dependencies and chromium.
 FROM node:18-buster-slim
-
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip
-RUN pip3 install tensorflow && \
-    pip3 install spleeter
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -59,5 +54,5 @@ ENV HOME="/tmp"
 
 WORKDIR ${FUNCTION_DIR}
 
-ENTRYPOINT ["./entrypoint.sh"]
-# CMD [ "index.handler" ]
+ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
+CMD [ "index.handler" ]
