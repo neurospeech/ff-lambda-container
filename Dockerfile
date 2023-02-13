@@ -23,7 +23,7 @@ RUN wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.t
     tar xvf ./ffmpeg-release-amd64-static.tar.xz --one-top-level=ffmpeg2 --strip-components 1 && \
     mv ${FUNCTION_DIR}/ffmpeg2 ${FUNCTION_DIR}/ffmpeg
 
-COPY package*.json ${FUNCTION_DIR}
+COPY package*.json ${FUNCTION_DIR}/
 
 RUN npm ci && \
     npm install aws-lambda-ric && \
