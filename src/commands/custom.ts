@@ -2,7 +2,7 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import Command, { asJson } from "../Command";
 import TempFileService from "../TempFileService";
-import fetch from "node-fetch";
+import fetch, { Request } from "node-fetch";
 import * as mime from "mime-types";
 import { existsSync, readFileSync, promises } from "fs";
 import { BlockBlobClient } from "@azure/storage-blob";
@@ -60,7 +60,7 @@ export default class Custom extends Command {
         await Promise.all(inputs.map((x) => TempFileService.downloadTo(x.url, x.filePath)));
 
         // we will upload all back to output urls...
-        const rs = await Command.run(command.split(" "));
+        let rs = await Command.run(command.split(" "));
 
         const tasks = [this.upload(output)];
 
@@ -72,7 +72,41 @@ export default class Custom extends Command {
         await Promise.all(tasks);
 
         console.log(rs);
+
+        // if it has trigger...
+        const trigger = input.trigger;
+        if (trigger) {
+            const r = await this.trigger(trigger);
+            rs += r;
+        }
+
         return asJson(rs);
+    }
+
+    async trigger(trigger) {
+        let url = trigger;
+        if (url.startsWith("{")) {
+            url = JSON.parse(url);
+        }
+        if (typeof url !== "string") {
+            const r = new Request(trigger.url, {
+                method: trigger.method ?? "POST",
+                headers: trigger.headers ?? {},
+                body: trigger.body ?? ""
+            });
+            url = r;
+        }
+        // trigger should be GET
+        try {
+            const rs = await fetch(url);
+            if(rs.status <= 300) {
+                return `Trigger invoked ${url} successfully.`;
+            }
+            throw new Error(`Failed ${await rs.text()}`);
+        } catch (e) {
+            console.error(e);
+            return `Trigger invoke ${url} failed ${e.stack ? e.stack : e}.`;
+        }
     }
 
     async thumbnails(input: string, times: ICommandInput[], tasks: Promise<void>[]) {
