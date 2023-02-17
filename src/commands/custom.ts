@@ -27,15 +27,15 @@ export default class Custom extends Command {
 
         let output: ICommandInput;
 
-        let thumbnails: ICommandInput[] = [];
+        let thumbnailTimes: ICommandInput[] = [];
 
         let command = input.command as string;
 
         for (const key in input) {
             if (Object.prototype.hasOwnProperty.call(input, key)) {
                 const element = input[key];
-                if (key === "thumbnails") {
-                    thumbnails = element;
+                if (key === "thumbnailTimes") {
+                    thumbnailTimes = element;
                     continue;
                 }
                 const filePath = (await TempFileService.getTempFile(path.extname(key))).path;
@@ -77,8 +77,8 @@ export default class Custom extends Command {
 
         const tasks = [this.upload(output)];
 
-        if (thumbnails.length) {
-            await this.thumbnails(output.filePath, thumbnails, tasks);
+        if (thumbnailTimes.length) {
+            await this.thumbnails(output.filePath, thumbnailTimes, tasks);
         }
 
         // upload all outputs...
