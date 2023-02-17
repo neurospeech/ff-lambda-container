@@ -64,7 +64,15 @@ export default class Custom extends Command {
         await Promise.all(inputs.map((x) => TempFileService.downloadTo(x.url, x.filePath)));
 
         // we will upload all back to output urls...
-        let rs = await Command.run(command.split(" "));
+        let rs = "";
+
+        const logDefault = (data: Buffer) => {
+            const dt = data.toString("utf8");
+            rs += dt + "\n";
+            console.log(dt);
+        };
+        
+        await Command.run(command.split(" "), logDefault, logDefault);
 
         const tasks = [this.upload(output)];
 
@@ -79,11 +87,9 @@ export default class Custom extends Command {
         const trigger = input.trigger;
         if (trigger) {
             const r = await this.trigger(trigger);
+            console.log(r);
             rs += r;
         }
-
-        console.log(rs);
-
         return asJson(rs);
     }
 
