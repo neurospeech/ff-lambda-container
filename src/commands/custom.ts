@@ -75,14 +75,14 @@ export default class Custom extends Command {
         // upload all outputs...
         await Promise.all(tasks);
 
-        console.log(rs);
-
         // if it has trigger...
         const trigger = input.trigger;
         if (trigger) {
             const r = await this.trigger(trigger);
             rs += r;
         }
+
+        console.log(rs);
 
         return asJson(rs);
     }
