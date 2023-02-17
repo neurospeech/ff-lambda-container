@@ -13,9 +13,15 @@ interface ICommandInput {
     url?: string;
 }
 
+const thumbnail = "thumbnail";
+const thumbnailLength = thumbnail.length;
+
+
 export default class Custom extends Command {
 
     public async process(input: any): Promise<any> {
+
+        console.log(`Processing ${JSON.stringify(input)}`);
 
         const inputs: ICommandInput[] = [];
 
@@ -28,9 +34,9 @@ export default class Custom extends Command {
         for (const key in input) {
             if (Object.prototype.hasOwnProperty.call(input, key)) {
                 const element = input[key];
-                if (key.startsWith("thumb")) {
+                if (key.startsWith(thumbnail)) {
                     thumbnails.push({
-                        name: key,
+                        name: key.substring(thumbnailLength),
                         url: element
                     });
                     continue;
