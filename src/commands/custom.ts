@@ -96,7 +96,7 @@ export default class Custom extends Command {
 
     async trigger(trigger) {
         let url = trigger;
-        if (url.startsWith("{")) {
+        if (typeof url === "string" && url.startsWith("{")) {
             url = JSON.parse(url);
         }
         if (typeof url !== "string") {
