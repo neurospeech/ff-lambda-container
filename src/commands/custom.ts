@@ -70,6 +70,7 @@ export default class Custom extends Command {
             const dt = data.toString("utf8");
             rs += dt + "\n";
             console.log(dt);
+            return true;
         };
         
         await Command.run(command.split(" "), logDefault, logDefault);
