@@ -27,18 +27,15 @@ export default class Custom extends Command {
 
         let output: ICommandInput;
 
-        const thumbnails: ICommandInput[] = [];
+        let thumbnails: ICommandInput[] = [];
 
         let command = input.command as string;
 
         for (const key in input) {
             if (Object.prototype.hasOwnProperty.call(input, key)) {
                 const element = input[key];
-                if (key.startsWith(thumbnail)) {
-                    thumbnails.push({
-                        name: key.substring(thumbnailLength),
-                        url: element
-                    });
+                if (key === "thumbnails") {
+                    thumbnails = element;
                     continue;
                 }
                 const filePath = (await TempFileService.getTempFile(path.extname(key))).path;
