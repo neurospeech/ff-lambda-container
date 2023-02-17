@@ -42,7 +42,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath
                     };
-                    command = command.replace(key, filePath);
+                    // overwrite file...
+                    command = command.replace(key, `-y ${filePath}`);
                     continue;
                 }
                 if (key.startsWith("input")) {
