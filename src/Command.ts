@@ -26,11 +26,26 @@ export default abstract class Command {
 
     public abstract process(input): Promise<any>;
 
+    /**
+     * Runs FFMPEG
+     * @param inputArgs args for FFMPeg
+     * @param log log Function
+     * @param error error logger
+     * @returns Promise<string>
+     */
     public static run(
         inputArgs: string[],
         log: (text, position) => boolean = logDefault,
         error: (text, position) => boolean = logDefault) {
-        const child = spawn(ffmpegPath, inputArgs);
+        return this.exec(ffmpegPath, inputArgs, log, error);
+    }
+
+    public static exec(
+        filePath: string,
+        inputArgs: string[],
+        log: (text, position) => boolean = logDefault,
+        error: (text, position) => boolean = logDefault) {
+        const child = spawn(filePath, inputArgs);
         return new Promise<string>((resolve, reject) => {
             const errors = [];
             const lines = [];

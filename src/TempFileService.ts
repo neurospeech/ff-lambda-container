@@ -4,6 +4,7 @@ import * as tmp from "tmp";
 import * as url from "url";
 import * as path from "path";
 import { promises as fsp } from "fs";
+import Command from "./Command";
 
 tmp.setGracefulCleanup();
 
@@ -28,6 +29,24 @@ export default class TempFileService {
 
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
+        // if it is a youtube url... use youtube-dl to download...
+        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
+            return await TempFileService.fetchYouTube(inputUrl, filePath);
+        }
+
+        return await TempFileService.fetch(inputUrl, filePath);
+    }
+
+    private static fetchYouTube(inputUrl: string, filePath: string) {
+        const logDefault = (data: Buffer) => {
+            console.log(data.toString("utf8"));
+            return true;
+        }
+        return Command.exec("/usr/local/bin/youtube-dl", `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
+    }
+
+
+    private static async fetch(inputUrl: string, filePath: string) {
         const rs = await fetch(inputUrl);
         if (rs.status >= 400) {
             // error...
@@ -40,5 +59,4 @@ export default class TempFileService {
 
         return filePath;
     }
-
 }
