@@ -15,7 +15,8 @@ RUN apt-get update && \
         libtool \
         cmake
 # Copy function code
-RUN mkdir -p ${FUNCTION_DIR}/
+RUN mkdir -p ${FUNCTION_DIR}/ && \
+    mkdir -p ${FUNCTION_DIR}/youtube
 
 WORKDIR ${FUNCTION_DIR}
 
