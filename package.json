@@ -1,6 +1,6 @@
 {
   "name": "ff-lambda-container",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "description": "",
   "main": "index.js",
   "scripts": {
