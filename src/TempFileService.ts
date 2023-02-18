@@ -17,6 +17,11 @@ export default class TempFileService {
 
     public static async downloadTo(inputUrl: string, filePath?: string) {
 
+        // if it is a youtube url... use youtube-dl to download...
+        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
+            return await TempFileService.fetchYouTube(inputUrl);
+        }
+
         if (!filePath) {
 
             const parsedUrl = url.parse(inputUrl);
@@ -29,16 +34,13 @@ export default class TempFileService {
 
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
-        // if it is a youtube url... use youtube-dl to download...
-        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
-            return await TempFileService.fetchYouTube(inputUrl, filePath);
-        }
-
         return await TempFileService.fetch(inputUrl, filePath);
     }
 
-    private static fetchYouTube(inputUrl: string, filePath: string) {
-        return new Promise<string>((resolve, reject) => {
+    private static async fetchYouTube(inputUrl: string) {
+        const t = await file({ mode: 0o644, prefix: "tmp-", postfix: ".mp4"});
+        const filePath = t.path;
+        return await new Promise<string>((resolve, reject) => {
             ytdl(inputUrl, { filter: format => format.container === "mp4" && format.height >= 480 })
                 .pipe(createWriteStream(filePath))
                     .on("finish", () => resolve(filePath))
