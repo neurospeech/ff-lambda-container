@@ -88,7 +88,7 @@ export default class Custom extends Command {
                     duration = duration < d ? d : duration;
                 }
 
-                if (t) {
+                if (duration && t) {
                     const p = Math.min(0.9, t / duration);
                     this.log(progress, "Converting", p);
                 }
