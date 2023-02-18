@@ -6,6 +6,11 @@ import fetch, { Request } from "node-fetch";
 import * as mime from "mime-types";
 import { existsSync, readFileSync, promises } from "fs";
 import { BlockBlobClient } from "@azure/storage-blob";
+import ProgressParser from "./ProgressParser";
+
+type ITriggerObject = { url: string, method: string, body: any, headers: any};
+
+type ITrigger = string | ITriggerObject;
 
 interface ICommandInput {
     name: string;
@@ -30,6 +35,8 @@ export default class Custom extends Command {
         let thumbnailTimes: ICommandInput[] = [];
 
         let command = input.command as string;
+
+        const progress = input.progress as ITriggerObject;
 
         for (const key in input) {
             if (Object.prototype.hasOwnProperty.call(input, key)) {
@@ -61,19 +68,46 @@ export default class Custom extends Command {
             }
         }
 
+        if (progress) {
+            this.log(progress, "Downloading files",0.01);
+        }
+
         await Promise.all(inputs.map((x) => TempFileService.downloadTo(x.url, x.filePath)));
 
         // we will upload all back to output urls...
         let rs = "";
 
+        let duration = 0;
+
         const logDefault = (data: Buffer) => {
             const dt = data.toString("utf8");
+
+            if (progress) {
+                const [d,t] = ProgressParser.parse(dt);
+                if (d) {
+                    duration = duration < d ? d : duration;
+                }
+
+                if (t) {
+                    const p = Math.min(0.9, t / duration);
+                    this.log(progress, "Converting", p);
+                }
+            }
+
             rs += dt + "\n";
             console.log(dt);
             return true;
         };
         
+        if (progress) {
+            this.log(progress, "Starting conversion",0.05);
+        }
+
         await Command.run(command.split(" "), logDefault, logDefault);
+
+        if (progress) {
+            this.log(progress, "Uploading files", 0.91);
+        }
 
         const tasks = [this.upload(output)];
 
@@ -84,8 +118,12 @@ export default class Custom extends Command {
         // upload all outputs...
         await Promise.all(tasks);
 
+        if (progress) {
+            this.log(progress, "Conversion successful", 1);
+        }
+
         // if it has trigger...
-        const trigger = input.trigger;
+        const trigger: ITrigger = input.trigger;
         if (trigger) {
             const r = await this.trigger(trigger);
             console.log(r);
@@ -94,16 +132,26 @@ export default class Custom extends Command {
         return asJson(rs);
     }
 
-    async trigger(trigger) {
-        let url = trigger;
-        if (typeof url === "string" && url.startsWith("{")) {
-            url = JSON.parse(url);
+    log(trigger: ITriggerObject, status, progress) {
+        this.trigger({ ... trigger, body: { status, progress } }).catch((e) => console.error(e));
+    }
+
+    async trigger(trigger: ITrigger) {
+        let url: string | Request;
+        if (typeof trigger === "string") {
+            url = trigger;
         }
-        if (typeof url !== "string") {
+        if (typeof trigger !== "string") {
+            let body = "";
+            const headers = trigger.headers ?? {};
+            if (typeof trigger.body === "object") {
+                body = JSON.stringify(trigger.body);
+                headers["content-type"] = "application/json";
+            }
             const r = new Request(trigger.url, {
                 method: trigger.method ?? "POST",
-                headers: trigger.headers ?? {},
-                body: trigger.body ?? ""
+                headers,
+                body
             });
             url = r;
         }
