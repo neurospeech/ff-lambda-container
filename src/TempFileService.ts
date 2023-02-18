@@ -63,7 +63,7 @@ export default class TempFileService {
         const container = getContainer(filePath);
 
         await new Promise<void>((resolve, reject) => {
-            ytdl(inputUrl, { filter: format => format.container === container && format.height >= 480 })
+            ytdl(inputUrl, { filter: format => format.container === container && format.height >= 480 && format.hasAudio && format.hasVideo })
                 .pipe(createWriteStream(filePath))
                     .on("finish", () => resolve())
                     .on("error", (error) => reject(error));
