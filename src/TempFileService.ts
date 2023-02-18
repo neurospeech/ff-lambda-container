@@ -75,6 +75,8 @@ export default class TempFileService {
             throw new Error(`Download failed for ${inputUrl}`)
         }
 
+        console.log(`File ${inputUrl} downloaded to ${filePath}, size is ${s.size}`);
+
         return filePath;
         // return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
     }
