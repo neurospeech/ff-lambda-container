@@ -5,6 +5,7 @@ import * as url from "url";
 import * as path from "path";
 import { createWriteStream, promises as fsp } from "fs";
 import ytdl from "ytdl-core";
+import { stat } from "fs/promises";
 
 tmp.setGracefulCleanup();
 
@@ -49,6 +50,12 @@ export default class TempFileService {
                     .on("finish", () => resolve())
                     .on("error", (error) => reject(error));
         });
+
+        const s = await stat(filePath);
+        if (!s.size) {
+            console.error("File download failed...");
+            throw new Error(`Download failed for ${inputUrl}`)
+        }
 
         console.log(`File ${inputUrl} downloaded to ${filePath}`);
 
