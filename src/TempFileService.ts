@@ -4,7 +4,7 @@ import * as tmp from "tmp";
 import * as url from "url";
 import * as path from "path";
 import { promises as fsp } from "fs";
-import Command from "./Command";
+import Command, { youtubePath } from "./Command";
 
 tmp.setGracefulCleanup();
 
@@ -42,7 +42,7 @@ export default class TempFileService {
             console.log(data.toString("utf8"));
             return true;
         }
-        return Command.exec("/usr/local/bin/youtube-dl", `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
+        return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
     }
 
 

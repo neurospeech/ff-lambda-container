@@ -7,6 +7,8 @@ const ffmpegPath = path.join(__dirname, "..", "ffmpeg", "ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(path.join(__dirname, "..", "ffmpeg", "ffprobe"));
 
+export const youtubePath = path.join(__dirname, "..", "youtube", "youtube-dl");
+
 export function asJson(body, statusCode = 200) {
     return {
         statusCode,
