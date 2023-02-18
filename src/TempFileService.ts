@@ -3,8 +3,8 @@ import fetch from "node-fetch";
 import * as tmp from "tmp";
 import * as url from "url";
 import * as path from "path";
-import { promises as fsp } from "fs";
-import Command, { youtubePath } from "./Command";
+import { createWriteStream, promises as fsp } from "fs";
+import ytdl from "ytdl-core";
 
 tmp.setGracefulCleanup();
 
@@ -30,7 +30,7 @@ export default class TempFileService {
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
         // if it is a youtube url... use youtube-dl to download...
-        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
+        if ( (inputUrl)) {
             return await TempFileService.fetchYouTube(inputUrl, filePath);
         }
 
@@ -38,11 +38,13 @@ export default class TempFileService {
     }
 
     private static fetchYouTube(inputUrl: string, filePath: string) {
-        const logDefault = (data: Buffer) => {
-            console.log(data.toString("utf8"));
-            return true;
-        }
-        return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
+        return new Promise<string>((resolve, reject) => {
+            ytdl(inputUrl, { filter: format => format.container === "mp4" && format.height >= 480 })
+                .pipe(createWriteStream(filePath))
+                    .on("finish", () => resolve(filePath))
+                    .on("error", (error) => reject(error));
+        });
+        // return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
     }
 
 
