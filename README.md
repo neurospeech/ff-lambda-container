@@ -33,7 +33,7 @@ interface IPayload {
         /**
          * You can specify multiple keys which starts with `input`. Such as `input0.mp4` or `input1.mp3`.
          * The value must be the url from where the video will be downloaded.
-         * 1. URL can be youtube url or direct HTTPS download url. In case of S3 or Blob, you must specify complete signed url.
+         * 1. Secure URL is preferred. In case of S3 or Blob, you must specify complete signed url.
          * 2. Input file key must have file extension.
         */
         "input*.*": string;
@@ -78,11 +78,9 @@ interface IThumbnailTime {
 {
   "rawPath": "/custom",
   "body": {
-    "input0.mp4": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+    "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     "output.webm": "https://blob.core.windows.com/account/container/blob.webm?signing.....",
     "command": "-i input0.mp4 -threads 10 libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus output.webm"
   }
 }
 ```
-
-In this example, `youtube-dl` will use `mp4` container to download file.
