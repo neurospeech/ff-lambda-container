@@ -30,7 +30,7 @@ export default class TempFileService {
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
         // if it is a youtube url... use youtube-dl to download...
-        if ( (inputUrl)) {
+        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
             return await TempFileService.fetchYouTube(inputUrl, filePath);
         }
 
