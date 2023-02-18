@@ -9,6 +9,24 @@ import { stat } from "fs/promises";
 
 tmp.setGracefulCleanup();
 
+const containers = {
+    ".mp4": "mp4",
+    ".webm": "webm"
+};
+
+const getContainer = (name: string) => {
+    for (const key in containers) {
+        if (Object.prototype.hasOwnProperty.call(containers, key)) {
+            const element = containers[key];
+            if (name.endsWith(key)) {
+                return element;
+            }
+        }
+    }
+
+    throw new Error("container not supported");
+};
+
 
 export default class TempFileService {
 
@@ -17,11 +35,6 @@ export default class TempFileService {
     }
 
     public static async downloadTo(inputUrl: string, filePath?: string) {
-
-        // if it is a youtube url... use youtube-dl to download...
-        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
-            return await TempFileService.fetchYouTube(inputUrl);
-        }
 
         if (!filePath) {
 
@@ -33,19 +46,24 @@ export default class TempFileService {
             filePath = t.path;
         }
 
+        // if it is a youtube url... use youtube-dl to download...
+        if (/^https\:\/\/(www.)?youtube.com\/watch\?/i.test(inputUrl)) {
+            return await TempFileService.fetchYouTube(inputUrl, filePath);
+        }
+
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
         return await TempFileService.fetch(inputUrl, filePath);
     }
 
-    private static async fetchYouTube(inputUrl: string) {
-        const t = await file({ mode: 0o644, prefix: "tmp-", postfix: ".mp4"});
-        const filePath = t.path;
+    private static async fetchYouTube(inputUrl: string, filePath) {
 
         console.log(`Downloading ${inputUrl} to ${filePath}`);
 
+        const container = getContainer(filePath);
+
         await new Promise<void>((resolve, reject) => {
-            ytdl(inputUrl, { filter: format => format.container === "mp4" && format.height >= 480 })
+            ytdl(inputUrl, { filter: format => format.container === container && format.height >= 480 })
                 .pipe(createWriteStream(filePath))
                     .on("finish", () => resolve())
                     .on("error", (error) => reject(error));
@@ -56,8 +74,6 @@ export default class TempFileService {
             console.error("File download failed...");
             throw new Error(`Download failed for ${inputUrl}`)
         }
-
-        console.log(`File ${inputUrl} downloaded to ${filePath}`);
 
         return filePath;
         // return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
