@@ -40,12 +40,19 @@ export default class TempFileService {
     private static async fetchYouTube(inputUrl: string) {
         const t = await file({ mode: 0o644, prefix: "tmp-", postfix: ".mp4"});
         const filePath = t.path;
-        return await new Promise<string>((resolve, reject) => {
+
+        console.log(`Downloading ${inputUrl} to ${filePath}`);
+
+        await new Promise<void>((resolve, reject) => {
             ytdl(inputUrl, { filter: format => format.container === "mp4" && format.height >= 480 })
                 .pipe(createWriteStream(filePath))
-                    .on("finish", () => resolve(filePath))
+                    .on("finish", () => resolve())
                     .on("error", (error) => reject(error));
         });
+
+        console.log(`File ${inputUrl} downloaded to ${filePath}`);
+
+        return filePath;
         // return Command.exec(youtubePath, `-f "mp4[height<=720]" -o ${filePath} ${inputUrl}`.split(" "), logDefault, logDefault);
     }
 
