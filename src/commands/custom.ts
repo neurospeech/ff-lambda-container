@@ -159,7 +159,7 @@ export default class Custom extends Command {
         try {
             const rs = await fetch(url);
             if(rs.status <= 300) {
-                return `Trigger invoked ${url} successfully.`;
+                return `Trigger invoked ${typeof trigger === "object" ? JSON.stringify(trigger) : trigger} successfully.`;
             }
             throw new Error(`Failed ${await rs.text()}`);
         } catch (e) {
