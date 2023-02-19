@@ -145,7 +145,7 @@ export default class Custom extends Command {
             let body = "";
             const headers = trigger.headers ??= {};
             if (typeof trigger.body === "object") {
-                trigger.body = JSON.stringify(trigger.body);
+                body = JSON.stringify(trigger.body);
                 headers["content-type"] = "application/json";
             }
             const r = new Request(trigger.url, {
