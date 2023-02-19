@@ -148,23 +148,27 @@ export default class Custom extends Command {
                 body = JSON.stringify(trigger.body);
                 headers["content-type"] = "application/json";
             }
-            const r = new Request(trigger.url, {
+            url = new Request(trigger.url, {
                 method: trigger.method ?? "POST",
                 headers,
                 body
             });
-            url = r;
         }
         // trigger should be GET
+        const fp = typeof url !== "object" ? url : JSON.stringify({
+            url: url.url,
+            body: url.body,
+            headers: !url.headers ? null : Object.fromEntries(url.headers.entries())
+        });
         try {
             const rs = await fetch(url);
             if(rs.status <= 300) {
-                return `Trigger invoked ${typeof trigger === "object" ? JSON.stringify(trigger) : trigger} successfully.`;
+                return `Trigger invoked ${fp} successfully.`;
             }
-            throw new Error(`Failed ${await rs.text()}`);
+            throw new Error(`${await rs.text()}`);
         } catch (e) {
             console.error(e);
-            return `Trigger invoke ${url} failed ${e.stack ? e.stack : e}.`;
+            return `Trigger invoke ${fp} failed ${e.stack ? e.stack : e}.`;
         }
     }
 
