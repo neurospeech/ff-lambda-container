@@ -133,7 +133,7 @@ export default class Custom extends Command {
     }
 
     log(trigger: ITriggerObject, status, progress) {
-        this.trigger({ ... trigger, body: { status, progress } }).catch((e) => console.error(e));
+        this.trigger({ ... trigger, body: { status, progress } }).then((r) => console.log(r)).catch((e) => console.error(e));
     }
 
     async trigger(trigger: ITrigger) {
