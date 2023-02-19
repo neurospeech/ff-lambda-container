@@ -133,7 +133,7 @@ export default class Custom extends Command {
     }
 
     log(trigger: ITriggerObject, status, progress) {
-        this.trigger({ ... trigger, body: { status, progress } }).then((r) => console.log(r)).catch((e) => console.error(e));
+        this.trigger({ ... trigger, body: { status, progress } }).catch((e) => console.error(e));
     }
 
     async trigger(trigger: ITrigger) {
@@ -155,11 +155,7 @@ export default class Custom extends Command {
             });
         }
         // trigger should be GET
-        const fp = typeof url !== "object" ? url : JSON.stringify({
-            url: url.url,
-            body: url.body,
-            headers: !url.headers ? null : Object.fromEntries(url.headers.entries())
-        });
+        const fp = typeof url !== "object" ? url : url.url;
         try {
             const rs = await fetch(url);
             if(rs.status <= 300) {
