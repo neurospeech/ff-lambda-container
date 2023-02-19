@@ -143,9 +143,9 @@ export default class Custom extends Command {
         }
         if (typeof trigger !== "string") {
             let body = "";
-            const headers = trigger.headers ?? {};
+            const headers = trigger.headers ??= {};
             if (typeof trigger.body === "object") {
-                body = JSON.stringify(trigger.body);
+                trigger.body = JSON.stringify(trigger.body);
                 headers["content-type"] = "application/json";
             }
             const r = new Request(trigger.url, {
