@@ -12,7 +12,7 @@ function parseTime(n) {
     h = parseInt(h, 10);
     m = parseInt(m, 10);
     s = parseFloat(s);
-    return (s * 60) + (m * 60) + (h * 60 * 60);
+    return s + (m * 60) + (h * 3600);
 }
 
 export default class ProgressParser {

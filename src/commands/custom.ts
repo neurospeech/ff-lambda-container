@@ -106,13 +106,17 @@ export default class Custom extends Command {
         await Command.run(command.split(" "), logDefault, logDefault);
 
         if (progress) {
-            this.log(progress, "Uploading files", 0.91);
+            this.log(progress, "Generating Thumbnails", 0.91);
         }
 
         const tasks = [this.upload(output)];
 
         if (thumbnailTimes.length) {
             await this.thumbnails(output.filePath, thumbnailTimes, tasks);
+        }
+
+        if (progress) {
+            this.log(progress, "Uploading files", 0.91);
         }
 
         // upload all outputs...
