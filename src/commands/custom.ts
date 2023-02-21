@@ -68,6 +68,21 @@ export default class Custom extends Command {
             }
         }
 
+        if (input.inputs) {
+            for (const key in input.inputs) {
+                const filePath = (await TempFileService.getTempFile(path.extname(key))).path;
+                if (Object.prototype.hasOwnProperty.call(input.inputs, key)) {
+                    const element = input.inputs[key];
+                    inputs.push({
+                        name: key,
+                        url: element,
+                        filePath,
+                    });
+                    command = command.replace(key, filePath);            
+                }
+            }
+        }
+
         if (progress) {
             this.log(progress, "Downloading files",0.01);
         }

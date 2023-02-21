@@ -72,6 +72,20 @@ interface IThumbnailTime {
 }
 ```
 
+```json
+{
+  "rawPath": "/custom",
+  "body": {
+    "inputs": {
+      "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "input1.mp3": "https://samplemp3.com/download/sample.mp3",
+    },
+    "output.mp4": "https://blob.core.windows.com/account/container/blob.mp4?signing.....",
+    "command": "-i input0.mp4 -i input1.mp3 -preset fast -threads 10 -codec:a aac -b:a 128k -codec:v libx264 -pix_fmt yuv420p -b:v 2500k -minrate 1500k -maxrate 4000k -bufsize 5000k -vf scale=-1:720 -movflags +faststart -map 0:v:0 -map 1:a:0 output.mp4"
+  }
+}
+```
+
 ## Convert to WebM
 
 ```json
