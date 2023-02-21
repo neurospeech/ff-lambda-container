@@ -39,6 +39,9 @@ export default class Custom extends Command {
         const progress = input.progress as ITriggerObject;
 
         for (const key in input) {
+            if (key === "inputs") {
+                continue;
+            }
             if (Object.prototype.hasOwnProperty.call(input, key)) {
                 const element = input[key];
                 if (key === "thumbnailTimes") {
@@ -54,9 +57,6 @@ export default class Custom extends Command {
                     };
                     // overwrite file...
                     command = command.replace(key, `-y ${filePath}`);
-                    continue;
-                }
-                if (key === "inputs") {
                     continue;
                 }
                 if (key.startsWith("input")) {
