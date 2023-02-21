@@ -56,6 +56,9 @@ export default class Custom extends Command {
                     command = command.replace(key, `-y ${filePath}`);
                     continue;
                 }
+                if (key === "inputs") {
+                    continue;
+                }
                 if (key.startsWith("input")) {
                     inputs.push({
                         name: key,
