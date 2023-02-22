@@ -14,6 +14,7 @@ export default class Commands {
             const { default: module } = require(modulePath);
             return await (new module()).process(params);
         } catch (error) {
+            console.error(error.stack ? error.stack : error);
             return asJson({
                 error,
                 event
