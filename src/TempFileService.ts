@@ -84,9 +84,9 @@ export default class TempFileService {
 
     private static async fetch(inputUrl: string, filePath: string) {
         const rs = await fetch(inputUrl);
-        if (rs.status >= 400) {
+        if (rs.status >= 300) {
             // error...
-            throw new Error(`${rs.statusText}\r\n${await rs.text()}`);
+            throw new Error(`Download ${inputUrl} failed \r\n${await rs.text()}`);
         }
 
         await fsp.writeFile(filePath, rs.body);

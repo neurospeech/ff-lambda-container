@@ -31,12 +31,14 @@ interface IPayload {
         */
         command: string;
         /**
-         * You can specify multiple keys which starts with `input`. Such as `input0.mp4` or `input1.mp3`.
+         * You can specify input keys inside inputs key. Such as `input0.mp4` or `input1.mp3`.
          * The value must be the url from where the video will be downloaded.
          * 1. Secure URL is preferred. In case of S3 or Blob, you must specify complete signed url.
          * 2. Input file key must have file extension.
         */
-        "input*.*": string;
+        "inputs": {
+          [key: string]: string;
+        };
 
         /** Signed URL of S3 or Blob URI to upload file
          * 1. Output file key must have file extension.
@@ -64,18 +66,6 @@ interface IThumbnailTime {
 {
   "rawPath": "/custom",
   "body": {
-    "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    "input1.mp3": "https://samplemp3.com/download/sample.mp3",
-    "output.mp4": "https://blob.core.windows.com/account/container/blob.mp4?signing.....",
-    "command": "-i input0.mp4 -i input1.mp3 -preset fast -threads 10 -codec:a aac -b:a 128k -codec:v libx264 -pix_fmt yuv420p -b:v 2500k -minrate 1500k -maxrate 4000k -bufsize 5000k -vf scale=-1:720 -movflags +faststart -map 0:v:0 -map 1:a:0 output.mp4"
-  }
-}
-```
-
-```json
-{
-  "rawPath": "/custom",
-  "body": {
     "inputs": {
       "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       "input1.mp3": "https://samplemp3.com/download/sample.mp3",
@@ -92,7 +82,9 @@ interface IThumbnailTime {
 {
   "rawPath": "/custom",
   "body": {
-    "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "inputs": {
+      "input0.mp4": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    }
     "output.webm": "https://blob.core.windows.com/account/container/blob.webm?signing.....",
     "command": "-i input0.mp4 -threads 10 libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus output.webm"
   }
