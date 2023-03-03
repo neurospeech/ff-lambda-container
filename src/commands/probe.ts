@@ -66,25 +66,25 @@ export default class FFProbe extends Command {
                 }
             }
 
-            const lessThan780p = 
-                (videoStream?.height && videoStream.height <= 780)
-                || (videoStream?.coded_height && videoStream.coded_height <= 780);
+            const lessThan720p = 
+                (videoStream?.height && videoStream.height <= 720)
+                || (videoStream?.coded_height && videoStream.coded_height <= 720);
 
             const isMobileReady = isAAC
                 && isH264
                 && fastStart
                 && isBelow30FPS
-                && lessThan780p;
+                && lessThan720p;
 
             const needsFastStart = isAAC
                 && isH264
                 && isBelow30FPS
-                && lessThan780p
+                && lessThan720p
                 && !fastStart;
 
             return {
                 ... metadata,
-                lessThan780p,
+                lessThan780p: lessThan720p,
                 hasAudio,
                 hasVideo,
                 isAAC,
