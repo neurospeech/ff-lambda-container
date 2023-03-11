@@ -46,15 +46,20 @@ export default class FFProbe extends Command {
 
             const fastStart = indexOfMoov < indexOfMDat;
 
-            const hasAudio = metadata.streams.some((x) => x.codec_type === "audio");
-            const hasVideo = metadata.streams.some((x) => x.codec_type === "video" && x.codec_name !== "mjpeg");
+            const audioStream = metadata.streams.find((x) => x.codec_type === "audio");
+            const videoStream = metadata.streams.find((x) => x.codec_type === "video" && x.codec_name !== "mjpeg");
+
+            const hasAudio = !!audioStream;
+            const hasVideo = !!videoStream;
 
             const isAAC = hasAudio 
                 ? metadata.streams.some((x) => x.codec_name === "aac" )
                 : true;
 
-            const videoStream = metadata.streams.find((x) => x.codec_type === "video");
             const isH264 = !videoStream  || (videoStream.codec_name === "h264" );
+
+            const videoCodec = videoStream?.codec_type;
+            const audioCodec = audioStream?.codec_type;
 
             let isBelow30FPS = false;
             const avgFrameRate = videoStream?.avg_frame_rate;
@@ -87,6 +92,8 @@ export default class FFProbe extends Command {
                 lessThan780p: lessThan720p,
                 hasAudio,
                 hasVideo,
+                videoCodec,
+                audioCodec,
                 isAAC,
                 isH264,
                 fastStart,
@@ -101,6 +108,8 @@ export default class FFProbe extends Command {
             return {
                 isAAC: false,
                 isH264: false,
+                videoCodec: null,
+                audioCodec: null,
                 hasAudio: false,
                 hasVideo: false,
                 fastStart: false,
