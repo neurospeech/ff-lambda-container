@@ -1,4 +1,12 @@
-import { asJson } from "./Command";
+function asJson(body, statusCode = 200) {
+    return {
+        statusCode,
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify(body)
+    };
+}
 
 declare var require;
 
@@ -12,7 +20,8 @@ export default class Commands {
             const modulePath = "./commands" + rawPath;
             console.log(`module: ${modulePath}`);
             const { default: module } = require(modulePath);
-            return await (new module()).process(params);
+            const result = await (new module()).process(params);
+            return asJson(result);
         } catch (error) {
             console.error(error.stack ? error.stack : error);
             return asJson({

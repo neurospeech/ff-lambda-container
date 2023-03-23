@@ -1,5 +1,5 @@
 import * as ffmpeg from "fluent-ffmpeg";
-import Command, { asJson } from "../Command";
+import Command from "../Command";
 import TempFileService from "../TempFileService";
 
 export default class FFProbe extends Command {
@@ -126,7 +126,7 @@ export default class FFProbe extends Command {
     public async process(input: { url: string }) {
 
         const rs = await FFProbe.probe(input.url);
-        return asJson(rs);
+        return rs;
     }
 
 }

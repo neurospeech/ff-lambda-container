@@ -7,16 +7,6 @@ const ffmpegPath = path.join(__dirname, "..", "ffmpeg", "ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(path.join(__dirname, "..", "ffmpeg", "ffprobe"));
 
-export function asJson(body, statusCode = 200) {
-    return {
-        statusCode,
-        headers: {
-            "content-type": "application/json"
-        },
-        body: JSON.stringify(body)
-    };
-}
-
 const logDefault = (data: Buffer) => {
     console.log(data.toString("utf8"));
     return true;

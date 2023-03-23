@@ -1,6 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import Command, { asJson } from "../Command";
+import Command from "../Command";
 import TempFileService from "../TempFileService";
 import fetch, { Request } from "node-fetch";
 import * as mime from "mime-types";
@@ -151,7 +151,7 @@ export default class Custom extends Command {
             console.log(r);
             rs += r;
         }
-        return asJson(rs);
+        return rs;
     }
 
     log(trigger: ITriggerObject, status, progress) {
