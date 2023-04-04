@@ -36,6 +36,7 @@ export default abstract class Command {
         log: (text, position) => boolean = logDefault,
         error: (text, position) => boolean = logDefault) {
         const child = spawn(filePath, inputArgs);
+        console.log(`Executing ${filePath} with args ${inputArgs.join(" ")}`);
         return new Promise<string>((resolve, reject) => {
             const errors = [];
             const lines = [];
@@ -47,6 +48,7 @@ export default abstract class Command {
                 const ep = errorPosition;
                 errorPosition += e.length;
                 if (!error) {
+                    console.error(e);
                     return;
                 }
                 if (error(e, ep)) {
@@ -60,6 +62,7 @@ export default abstract class Command {
                 const lp = logPosition;
                 logPosition += data.length;
                 if (!log) {
+                    console.error(data);
                     return;
                 }
                 if (log(data, lp)) {
