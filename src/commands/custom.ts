@@ -83,7 +83,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath,
                     });
-                    command = command.replace(key, filePath);            
+                    // @ts-expect-error
+                    command = command.replaceAll(key, filePath);            
                 }
             }
         }
