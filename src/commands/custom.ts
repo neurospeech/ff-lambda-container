@@ -56,7 +56,8 @@ export default class Custom extends Command {
                         filePath
                     };
                     // overwrite file...
-                    command = command.replace(key, `-y ${filePath}`);
+                    // @ts-expect-error
+                    command = command.replaceAll(key, `-y ${filePath}`);
                     continue;
                 }
                 if (key.startsWith("input")) {
@@ -65,7 +66,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath,
                     });
-                    command = command.replace(key, filePath);
+                    // @ts-expect-error
+                    command = command.replaceAll(key, filePath);
                     continue;
                 }
             }
