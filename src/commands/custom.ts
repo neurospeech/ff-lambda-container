@@ -44,10 +44,15 @@ export default class Custom extends Command {
 
         let commands: string[] = input.commands ??= (input.command as string).split(" ");
 
-        const replaceNames = (search, replace) => {
-            for (let index = 0; index < commands.length; index++) {
-                commands[index] = commands[index].replaceAll(search, replace);
+        const replaceNames = (search, replace, prefix?: string) => {
+            const r = [];
+            for (const iterator of commands) {
+                if (prefix && iterator.includes(search)) {
+                    r.push(prefix);
+                }
+                r.push(iterator.replaceAll(search, replace));
             }
+            commands = r;
         };
 
         const progress = input.progress as ITriggerObject;
@@ -70,7 +75,7 @@ export default class Custom extends Command {
                         filePath
                     };
 
-                    replaceNames(key, `-y ${filePath}`);
+                    replaceNames(key, filePath, "-y");
                     continue;
                 }
                 if (key.startsWith("input")) {
