@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
       "target": "es6",
-      "watch": false,
       "module": "commonjs",
       "jsx": "react",
       "jsxFactory": "XNode.create",

@@ -21,6 +21,14 @@ interface ICommandInput {
 const thumbnail = "thumbnail";
 const thumbnailLength = thumbnail.length;
 
+declare global {
+
+    interface String {
+        replaceAll?(s,r): string;
+    }
+}
+
+String.prototype.replaceAll ??= function (s, r) { return this.split(s).join(r); };
 
 export default class Custom extends Command {
 
@@ -34,7 +42,13 @@ export default class Custom extends Command {
 
         let thumbnailTimes: ICommandInput[] = [];
 
-        let command = input.command as string;
+        let commands: string[] = input.commands ??= (input.command as string).split(" ");
+
+        const replaceNames = (search, replace) => {
+            for (let index = 0; index < commands.length; index++) {
+                commands[index] = commands[index].replaceAll(search, replace);
+            }
+        };
 
         const progress = input.progress as ITriggerObject;
 
@@ -55,9 +69,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath
                     };
-                    // overwrite file...
-                    // @ts-expect-error
-                    command = command.replaceAll(key, `-y ${filePath}`);
+
+                    replaceNames(key, `-y ${filePath}`);
                     continue;
                 }
                 if (key.startsWith("input")) {
@@ -66,8 +79,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath,
                     });
-                    // @ts-expect-error
-                    command = command.replaceAll(key, filePath);
+
+                    replaceNames(key, filePath);
                     continue;
                 }
             }
@@ -83,8 +96,8 @@ export default class Custom extends Command {
                         url: element,
                         filePath,
                     });
-                    // @ts-expect-error
-                    command = command.replaceAll(key, filePath);            
+
+                    replaceNames(key, filePath);            
                 }
             }
         }
@@ -124,7 +137,7 @@ export default class Custom extends Command {
             this.log(progress, "Starting conversion",0.05);
         }
 
-        await Command.run(command.split(" "), logDefault, logDefault);
+        await Command.run(commands, logDefault, logDefault);
 
         if (progress) {
             this.log(progress, "Generating Thumbnails", 0.91);
