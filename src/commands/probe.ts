@@ -73,7 +73,9 @@ export default class FFProbe extends Command {
 
             const lessThan720p = 
                 (videoStream?.height && videoStream.height <= 720)
-                || (videoStream?.coded_height && videoStream.coded_height <= 720);
+                || (videoStream?.coded_height && videoStream.coded_height <= 720)
+                || (videoStream?.width && videoStream.width <= 720)
+                || (videoStream?.coded_width && videoStream.coded_width <= 720);
 
             const isMobileReady = isAAC
                 && isH264
