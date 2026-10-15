@@ -50,6 +50,10 @@ FROM node:24-bookworm-slim
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
 # Set working directory to function root directory
+
+# 1. TELL THE RIC PACKAGES WHERE TO FIND THE HANDLER MODULE
+ENV LAMBDA_TASK_ROOT=${FUNCTION_DIR}
+
 WORKDIR ${FUNCTION_DIR}
 # Copy in the build image dependencies
 COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
