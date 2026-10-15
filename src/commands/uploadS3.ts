@@ -4,19 +4,17 @@ import * as mime from "mime-types";
 export default async function uploadS3(url: string, filePath: string) {
     // we will directly upload using FormData..
 
-    const body = new FormData();
 
-    const buffer = await readFile(filePath);
+    const body = await readFile(filePath);
 
-    const type = mime.lookup(filePath);
-
-    body.append("file", new File([buffer], "file", { type }),)
+    const contentType = mime.lookup(filePath);
 
     const r = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         body,
         headers: {
-            "cache-control": "public,max-age=8600000"
+            "cache-control": "public,max-age=8600000",
+            "content-type": contentType
         }
     });
     if(r.status > 399) {

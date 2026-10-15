@@ -1,5 +1,4 @@
 import { file } from "tmp-promise";
-import fetch from "node-fetch";
 import * as tmp from "tmp";
 import * as url from "url";
 import * as path from "path";
