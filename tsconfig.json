@@ -1,27 +1,34 @@
 {
     "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "jsx": "react",
-      "jsxFactory": "XNode.create",
-      "sourceMap": true,
-      "declaration": false,
-      "moduleResolution": "node",
-      "outDir": "dist",
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "lib": [
-        "es6"
-      ]
+        "jsx": "react",
+        "target": "ES2021",
+        "module":"NodeNext",
+        "incremental": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "rootDir": "./src",
+        "tsBuildInfoFile": "./dist/.tsbuildinfo",
+        "strict": false,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noUnusedLocals": true,
+        "jsxFactory": "XNode.create",
+        "lib": [
+            "ES2018",
+            "ES2021.WeakRef",
+            "esnext.disposable",
+            "ES2021.String",
+            "ES2022.Object"
+        ]
     },
     "include": [
-      "src/**/*"
-    ],
+        "src/**/*",
+        "src/wwwroot/routes/.well-known/**/*"
+   ],
     "exclude": [
-      "node_modules",
-      "tests"
+		"node_modules",
+		"tests"
     ]
 }

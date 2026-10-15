@@ -7,9 +7,8 @@
                 "Bypass"
             ]
         }
-    },
-    "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "typescript.preferences.includePackageJsonAutoImports": "on",
+   },
+   "terminal.integrated.defaultProfile.windows": "PowerShell",
     "emmet.showExpandedAbbreviation": "never",
     "editor.bracketPairColorization.enabled": true,
     "eslint.alwaysShowStatus": true,
@@ -30,5 +29,18 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "vscode.json-language-features"
-	}
+	},
+	"cSpell.words": [
+		"faststart",
+		"ffprobe",
+		"libx",
+		"maxrate",
+		"mdat",
+		"minrate",
+		"mjpeg",
+		"Moov",
+		"movflags",
+		"stillimage",
+		"ytdl"
+	]
 }

@@ -4,9 +4,9 @@ import { BlockBlobClient } from "@azure/storage-blob";
 import { copyFileSync, existsSync, promises } from "fs";
 import TempFileService from "../TempFileService";
 import * as mime from "mime-types";
-import fetch from "node-fetch";
 import FFProbe from "../commands/probe";
 import Command from "../Command";
+import uploadS3 from "../commands/uploadS3";
 
 declare var __dirname;
 let img = path.join(__dirname, "..", "..", "images", "logo.jpg");
@@ -188,13 +188,19 @@ export default class FFMpeg {
 
         const blobContentType = mime.lookup(filePath);
 
-        var b = new BlockBlobClient(url);
-        await b.uploadFile(filePath, {
-            blobHTTPHeaders: {
-                blobContentType,
-                blobCacheControl: "public, max-age=3240000"
-            }
-        });
+        if(url.includes("blob.core.windows.net")) {
+                
+
+            var b = new BlockBlobClient(url);
+            await b.uploadFile(filePath, {
+                blobHTTPHeaders: {
+                    blobContentType,
+                    blobCacheControl: "public, max-age=3240000"
+                }
+            });
+        } else {
+            await uploadS3(url, filePath);
+        }
         try {
             await promises.unlink(filePath);
         } catch {

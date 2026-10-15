@@ -4,9 +4,10 @@ import Command from "../Command";
 import TempFileService from "../TempFileService";
 import fetch, { Request } from "node-fetch";
 import * as mime from "mime-types";
-import { existsSync, readFileSync, promises } from "fs";
+import { existsSync, promises } from "fs";
 import { BlockBlobClient } from "@azure/storage-blob";
 import ProgressParser from "./ProgressParser";
+import uploadS3 from "./uploadS3";
 
 type ITriggerObject = { url: string, method: string, body: any, headers: any};
 
@@ -17,18 +18,6 @@ interface ICommandInput {
     filePath?: string;
     url?: string;
 }
-
-const thumbnail = "thumbnail";
-const thumbnailLength = thumbnail.length;
-
-declare global {
-
-    interface String {
-        replaceAll?(s,r): string;
-    }
-}
-
-String.prototype.replaceAll ??= function (s, r) { return this.split(s).join(r); };
 
 export default class Custom extends Command {
 
@@ -284,8 +273,15 @@ export default class Custom extends Command {
             // use put...
             return this.uploadAzure(x);
         }
-        console.log(`File ${x.url} not supported for upload.`);
+        // upload directly..
+        console.log(`Uploading ${x.filePath} to ${x.url}`);
+        await uploadS3(x.url, x.filePath);
+
+        try {
+            await promises.unlink(x.filePath);
+        } catch {}
     }
+
 
     async uploadAzure({url, filePath}: ICommandInput) {
         console.log(`Uploading ${url}`);

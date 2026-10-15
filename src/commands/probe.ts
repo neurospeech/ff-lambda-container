@@ -39,7 +39,7 @@ export default class FFProbe extends Command {
                 return indexOfMoov === -1 || indexOfMDat === -1;
             };
 
-            const text = await Command.run(
+            await Command.run(
                 ["-v", "trace",
                 "-i",  file,
                 "-f",  "null", "-"], null, checkPosition);

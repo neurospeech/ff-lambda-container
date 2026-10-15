@@ -1,7 +1,7 @@
 ARG FUNCTION_DIR="/function"
 
 # Build Stage 1: Install aws-lambda-ric dependencies, npm install package.json dependencies
-FROM node:20-buster as build-image
+FROM node:24-buster as build-image
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
 # AWS Lambda runtime dependencies
@@ -45,7 +45,7 @@ RUN tsc
 # COPY ffmpeg ${FUNCTION_DIR}/ffmpeg
 
 # Build Stage 2: Copy Build Stage 1 files in to Stage 2. Install chromium dependencies and chromium.
-FROM node:20-buster-slim
+FROM node:24-buster-slim
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
