@@ -2,7 +2,7 @@
     "compilerOptions": {
         "jsx": "react",
         "target": "ES2021",
-        "module":"NodeNext",
+        "module":"commonjs",
         "incremental": true,
         "sourceMap": true,
         "outDir": "dist",
