@@ -1,3 +1,3 @@
-const Commands = require("./dist/App").default;
+import Commands from "./dist/App";
 
 exports.handler = (event, context) => Commands.process(event);

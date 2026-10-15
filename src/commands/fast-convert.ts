@@ -1,5 +1,5 @@
-import Command from "../Command";
-import FFMpeg from "../lib/FFMpeg";
+import Command from "../Command.js";
+import FFMpeg from "../lib/FFMpeg.js";
 
 /**
  * This is used for backward compatibility

@@ -1,13 +1,13 @@
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-import Command from "../Command";
-import TempFileService from "../TempFileService";
+import Command from "../Command.js";
+import TempFileService from "../TempFileService.js";
 import fetch, { Request } from "node-fetch";
 import * as mime from "mime-types";
 import { existsSync, promises } from "fs";
 import { BlockBlobClient } from "@azure/storage-blob";
-import ProgressParser from "./ProgressParser";
-import uploadS3 from "./uploadS3";
+import ProgressParser from "./ProgressParser.js";
+import uploadS3 from "./uploadS3.js";
 
 type ITriggerObject = { url: string, method: string, body: any, headers: any};
 

@@ -2,11 +2,11 @@ import ffmpeg from "fluent-ffmpeg";
 import * as path from "path";
 import { BlockBlobClient } from "@azure/storage-blob";
 import { copyFileSync, existsSync, promises } from "fs";
-import TempFileService from "../TempFileService";
+import TempFileService from "../TempFileService.js";
 import * as mime from "mime-types";
-import FFProbe from "../commands/probe";
-import Command from "../Command";
-import uploadS3 from "../commands/uploadS3";
+import FFProbe from "../commands/probe.js";
+import Command from "../Command.js";
+import uploadS3 from "../commands/uploadS3.js";
 
 declare var __dirname;
 let img = path.join(__dirname, "..", "..", "images", "logo.jpg");

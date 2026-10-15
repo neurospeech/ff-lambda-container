@@ -1,6 +1,6 @@
 // import * as ffmpeg from "fluent-ffmpeg";
-import Command from "../Command";
-import TempFileService from "../TempFileService";
+import Command from "../Command.js";
+import TempFileService from "../TempFileService.js";
 
 const slow = `-preset slow -codec:a aac -b:a 128k -codec:v libx264 -pix_fmt yuv420p -b:v 2500k -minrate 1500k -maxrate 4000k -bufsize 5000k -vf scale=-1:720`;
 

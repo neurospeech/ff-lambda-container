@@ -1,6 +1,6 @@
 import * as ffmpeg from "fluent-ffmpeg";
-import Command from "../Command";
-import TempFileService from "../TempFileService";
+import Command from "../Command.js";
+import TempFileService from "../TempFileService.js";
 
 export default class FFProbe extends Command {
 

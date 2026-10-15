@@ -1,4 +1,4 @@
-import Command from "../Command";
+import Command from "../Command.js";
 
 export default class Mp4 extends Command {
     public process(input: any): Promise<any> {
