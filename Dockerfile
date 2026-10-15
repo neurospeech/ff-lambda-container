@@ -37,7 +37,7 @@ RUN npm ci && \
 # RUN chmod +x ${FUNCTION_DIR}/entrypoint.sh
 COPY src ${FUNCTION_DIR}/src
 COPY images ${FUNCTION_DIR}/images
-COPY index.js ${FUNCTION_DIR}
+COPY index.mjs ${FUNCTION_DIR}
 COPY rename.js ${FUNCTION_DIR}
 COPY tsconfig.json ${FUNCTION_DIR}
 RUN tsc
