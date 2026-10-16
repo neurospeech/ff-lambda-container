@@ -13,7 +13,7 @@ export default async function uploadS3(url: string, filePath: string) {
         method: "PUT",
         body,
         headers: {
-            "cache-control": "public,max-age=8600000",
+            "cache-control": "public,max-age=31536000",
             "content-type": contentType
         }
     });
