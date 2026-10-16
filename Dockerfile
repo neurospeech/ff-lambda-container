@@ -64,4 +64,4 @@ ENV HOME="/tmp"
 WORKDIR ${FUNCTION_DIR}
 
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
-CMD [ "index.handler" ]
+CMD [ "/function/index.handler" ]
