@@ -8,8 +8,7 @@ import FFProbe from "../commands/probe.js";
 import Command from "../Command.js";
 import uploadS3 from "../commands/uploadS3.js";
 
-declare var __dirname;
-let img = path.join(__dirname, "..", "..", "images", "logo.jpg");
+let img = path.join(import.meta.dirname, "..", "..", "images", "logo.jpg");
 
 export interface IFFMpegThumbnail {
     time: number;
