@@ -1,4 +1,4 @@
-import * as ffmpeg from "fluent-ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
 import Command from "../Command.js";
 import TempFileService from "../TempFileService.js";
 

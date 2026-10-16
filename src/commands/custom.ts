@@ -2,7 +2,7 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import Command from "../Command.js";
 import TempFileService from "../TempFileService.js";
-import * as mime from "mime-types";
+import mime from "mime-types";
 import { existsSync, promises } from "fs";
 import { BlockBlobClient } from "@azure/storage-blob";
 import ProgressParser from "./ProgressParser.js";

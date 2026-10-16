@@ -1,7 +1,7 @@
 import { file } from "tmp-promise";
-import * as tmp from "tmp";
-import * as url from "url";
-import * as path from "path";
+import tmp from "tmp";
+import url from "url";
+import path from "path";
 import { createWriteStream, promises as fsp } from "fs";
 import ytdl from "ytdl-core";
 import { stat } from "fs/promises";

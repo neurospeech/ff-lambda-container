@@ -1,5 +1,5 @@
 import { readFile } from "fs/promises";
-import * as mime from "mime-types";
+import mime from "mime-types";
 
 export default async function uploadS3(url: string, filePath: string) {
     // we will directly upload using FormData..

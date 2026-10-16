@@ -1,9 +1,9 @@
 import ffmpeg from "fluent-ffmpeg";
-import * as path from "path";
+import path from "path";
 import { BlockBlobClient } from "@azure/storage-blob";
 import { copyFileSync, existsSync, promises } from "fs";
 import TempFileService from "../TempFileService.js";
-import * as mime from "mime-types";
+import mime from "mime-types";
 import FFProbe from "../commands/probe.js";
 import Command from "../Command.js";
 import uploadS3 from "../commands/uploadS3.js";
