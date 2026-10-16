@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import * as ffmpeg from "fluent-ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 const dirName = import.meta.dirname;
 const ffmpegPath = path.join(dirName, "..", "ffmpeg", "ffmpeg");
