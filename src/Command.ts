@@ -3,7 +3,7 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 const ffmpegPath = path.join( process.env.FFMPEG_FOLDER, "ffmpeg");
 
-ffmpeg.setFfmpegPath(ffmpegPath);
+ffmpeg.setFfmpegPath(path.join( process.env.FFMPEG_FOLDER, "ffmpeg"));
 ffmpeg.setFfprobePath(path.join(process.env.FFMPEG_FOLDER, "ffprobe"));
 
 const logDefault = (data: Buffer) => {
