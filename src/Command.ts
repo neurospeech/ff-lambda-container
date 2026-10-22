@@ -1,11 +1,10 @@
 import { spawn } from "child_process";
 import ffmpeg from "fluent-ffmpeg";
 import path from "path";
-const dirName = import.meta.dirname;
-const ffmpegPath = path.join(dirName, "..", "ffmpeg", "ffmpeg");
+const ffmpegPath = path.join( process.env.FFMPEG_FOLDER, "ffmpeg");
 
 ffmpeg.setFfmpegPath(ffmpegPath);
-ffmpeg.setFfprobePath(path.join(dirName, "..", "ffmpeg", "ffprobe"));
+ffmpeg.setFfprobePath(path.join(process.env.FFMPEG_FOLDER, "ffprobe"));
 
 const logDefault = (data: Buffer) => {
     console.log(data.toString("utf8"));
